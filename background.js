@@ -1,68 +1,48 @@
 const API_KEY = "AIzaSyCZx34avqXbxcZMWFz9xSeY6f93ktYEzgg";
-const trustedSites = new Set(); // Stores user-approved sites
+const API_URL= `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${API_KEY}`;
 
-// Block certain file extensions (e.g., .exe, .zip)
-const blockedExtensions = ['.exe', '.zip', '.bat', '.msi'];
 
-async function checkSafeBrowsing(url) {
-  if (trustedSites.has(url)) {
-    return false; // Allow access to trusted sites
-  }
-
+async function checkURL(url) {
   const requestBody = {
-    client: {
-      clientId: "safe-browsing-extension",
-      clientVersion: "1.0"
-    },
-    threatInfo: {
-      threatTypes: ["MALWARE", "SOCIAL_ENGINEERING"],
-      platformTypes: ["WINDOWS", "LINUX", "ANDROID"],
-      threatEntryTypes: ["URL"],
-      threatEntries: [{ url }]
-    }
+      client: {
+          clientId: "your-extension",
+          clientVersion: "1.0"
+      },
+      threatInfo: {
+          threatTypes: ["MALWARE", "SOCIAL_ENGINEERING", "UNWANTED_SOFTWARE"],
+          platformTypes: ["ANY_PLATFORM"],
+          threatEntryTypes: ["URL"],
+          threatEntries: [{ url: url }]
+      }
   };
 
-  const response = await fetch(`https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${API_KEY}`, {
-    method: "POST",
-    body: JSON.stringify(requestBody),
-    headers: { "Content-Type": "application/json" }
-  });
+  try {
+      const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(requestBody)
+      });
 
-  const data = await response.json();
-  return data.matches !== undefined;
+      const data = await response.json();
+
+      if (data.matches) {
+          console.warn(`🚨 Unsafe site detected: ${url}`);
+          return true; // Site is unsafe
+      }
+  } catch (error) {
+      console.error("Safe Browsing API error:", error);
+  }
+
+  return false; // Site is safe
 }
 
-// Intercept requests before they happen
-chrome.webRequest.onBeforeRequest.addListener(
-  async function (details) {
-    const isUnsafe = await checkSafeBrowsing(details.url);
+// Listen for tab updates
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
+  if (changeInfo.url) {
+      const isUnsafe = await checkURL(changeInfo.url);
 
-    if (isUnsafe) {
-      const userDecision = confirm(
-        `🚨 Warning! This site (${details.url}) is flagged as unsafe. Do you want to continue at your own risk?`
-      );
-      if (userDecision) {
-        trustedSites.add(details.url); // Allow access if user confirms
-        return { cancel: false };
+      if (isUnsafe) {
+          chrome.tabs.update(tabId, { url: chrome.runtime.getURL("warning.html") });
       }
-      return { cancel: true }; // Block if user declines
-    }
-
-    // Block file downloads with certain extensions (e.g., .exe)
-    const url = details.url.toLowerCase();
-    const extension = url.substring(url.lastIndexOf('.'));
-    if (blockedExtensions.includes(extension)) {
-      const userDecision = confirm(
-        `⚠️ This site is attempting to download a file with a dangerous extension (${extension}). Do you want to allow the download?`
-      );
-      if (userDecision) {
-        return { cancel: false }; // Allow download if user confirms
-      }
-      return { cancel: true }; // Block if user declines
-    }
-
-    return { cancel: false }; // Allow other requests
-  },
-  { urls: ["<all_urls>"] },
-  ["blocking"]
-);
+  }
+});

@@ -1,26 +1,51 @@
 {
-    "manifest_version": 3,
-    "name": "Safe Browsing AI",
-    "version": "1.0",
-    "description": "Detects and blocks phishing, malware, and ransomware threats",
-    "permissions": ["tabs", "scripting", "webRequest", "downloads", "storage"],
-    "host_permissions": ["<all_urls>"],
-    "background": {
-      "service_worker": "background.js"
-    },
-    "content_scripts": [
-      {
-        "matches": ["<all_urls>"],
-        "js": ["tensorflow.js", "content.js"]
-      }
-    ],
-    "action": {
-      "default_popup": "popup.html"
-    },
-    "icons": {
-      "16": "icons/icon16.png",
-      "48": "icons/icon48.png",
-      "128": "icons/icon128.png"
+  "manifest_version": 3,
+  "name": "Matrix",
+  "version": "1.0",
+  "description": "Detects Phising ,Malicious Website, Malware and Ransomeware attacks",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "webRequest",
+    "downloads",
+    "storage",
+    "declarativeNetRequest"
+  ],
+  "host_permissions": [
+    "https://*/*",
+    "http://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_page": "trusted.html",
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ]
     }
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "warning.html",
+        "MATRIX/icons&images/warning-icon.svg"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
+    }
+  ],
+  "icons": {
+    "16": "icons&images/mat-icon16.jpg",
+    "48": "icons&images/mat-icon48.jpg",
+    "128": "icons&images/mat-icon128.jpg"
   }
-  
+}

@@ -1,31 +1,38 @@
-const script = document.createElement("script");
-script.src = "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs";
-document.head.appendChild(script);
+// Function to show the warning overlay
+function showWarningOverlay() {
+  // Create the iframe element
+  let iframe = document.createElement("iframe");
+  iframe.style.position = "fixed";
+  iframe.style.top = "0";
+  iframe.style.left = "0";
+  iframe.style.width = "100%";
+  iframe.style.height = "100%";
+  iframe.style.border = "none";
+  iframe.style.zIndex = "9999";
+  iframe.src = chrome.runtime.getURL("warning.html");
 
-script.onload = async () => {
-  console.log("TensorFlow.js Loaded");
+  // Block user interaction with the page
+  document.body.style.pointerEvents = "none";
 
-  const model = await tf.loadLayersModel("https://yourmodelurl.com/model.json");
+  // Append the iframe to the body
+  document.body.appendChild(iframe);
 
-  function analyzeJavaScriptBehavior() {
-    let features = {
-      highCPU: performance.now() > 10000, // Detects high CPU usage
-      largeFileDownload: document.querySelectorAll("a[href$='.exe'], a[href$='.zip']").length > 0,
-      scriptModifications: document.scripts.length > 10,
-      suspiciousAPICalls: window.XMLHttpRequest !== undefined
-    };
+  // Listen for messages from warning.html
+  window.addEventListener("message", function(event) {
+      if (event.data === "trust-site") {
+          // User trusted the site, remove overlay and unblock page
+          document.body.style.pointerEvents = "auto";
+          iframe.remove();
+      } else if (event.data === "block-site") {
+          // Redirect to a safe page or close the tab
+          window.location.href = "https://www.google.com";
+      }
+  });
+}
 
-    return Object.values(features);
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === "showWarning") {
+    showWarningOverlay(); // Call the function when unsafe site is detected
   }
+});
 
-  setInterval(async () => {
-    const input = tf.tensor([analyzeJavaScriptBehavior()]);
-    const prediction = model.predict(input);
-    const riskScore = prediction.dataSync()[0];
-
-    if (riskScore > 0.8) {
-      alert("⚠️ Potential Ransomware Activity Detected! Close this page immediately.");
-      window.close();
-    }
-  }, 5000);
-};

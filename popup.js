@@ -24,10 +24,10 @@ async function runPrediction() {
   if (!model) return;
 
   // Example features for prediction (this can be customized based on what you're analyzing)
-  const features = [0.5, 0.6, 0.3]; // Example data points
-  const inputTensor = tf.tensor([features]);
-  const prediction = await model.predict(inputTensor);
-  const riskScore = prediction.dataSync()[0];
+  // const features = [0.5, 0.6, 0.3]; // Example data points
+  // const inputTensor = tf.r([features]);
+  // const prediction = await model.predict(inputTensor);
+  // const riskScore = prediction.dataSync()[0];
 
   // Display result in popup based on the prediction score
   if (riskScore > 0.8) {
