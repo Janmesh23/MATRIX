@@ -2,14 +2,18 @@
   "manifest_version": 3,
   "name": "Matrix",
   "version": "1.0",
-  "description": "Detects Phising ,Malicious Website, Malware and Ransomeware attacks",
+  "description": "Detects Phishing, Malicious Websites, Malware, and Ransomware attacks.",
   "permissions": [
     "tabs",
+    "activeTab",
     "scripting",
     "webRequest",
+    "webNavigation",
     "downloads",
     "storage",
-    "declarativeNetRequest"
+    "declarativeNetRequest",
+    "alarms",
+    "offscreen"
   ],
   "host_permissions": [
     "https://*/*",
@@ -36,7 +40,9 @@
     {
       "resources": [
         "warning.html",
-        "MATRIX/icons&images/warning-icon.svg"
+        "MATRIX/icons&images/warning-icon.svg",
+        "MATRIX/styles.css",
+        "MATRIX/warning.js"
       ],
       "matches": [
         "<all_urls>"
