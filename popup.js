@@ -4,6 +4,8 @@ let model;
 const modelStatus = document.getElementById("modelStatus");
 const predictionResult = document.getElementById("predictionResult");
 const testDownloadBtn = document.getElementById("testDownloadBtn");
+import {GOOGLE_SAFE_BROWSING_API_KEY, VIRUSTOTAL_API_KEY,GMAIL_API_CLIENT_ID} from "./config.js";
+
 
 // Load the model from the server
 async function loadModel() {
