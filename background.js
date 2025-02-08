@@ -1,6 +1,7 @@
 const API_KEY = "AIzaSyCZx34avqXbxcZMWFz9xSeY6f93ktYEzgg";
 const API_URL = `https://safebrowsing.googleapis.com/v4/threatMatches:find?key=${API_KEY}`;
 
+import CONFIG from './config.js';
 // Keep service worker alive using alarms
 chrome.alarms.create("keepAlive", { periodInMinutes: 4 }); // Runs every 4 minutes
 
