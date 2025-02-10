@@ -1,8 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <script src="offscreen.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offscreen Processing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background: #0f172a;
+            color: #94a3b8;
+            font-family: monospace;
+        }
+        
+        .log-container {
+            display: none; /* Hidden by default since this is an offscreen page */
+        }
+    </style>
 </head>
 <body>
+    <div class="log-container p-4">
+        <div class="text-sm">Background Process Active</div>
+        <div id="log" class="mt-2 text-xs"></div>
+    </div>
+    <script src="offscreen.js"></script>
 </body>
 </html>
