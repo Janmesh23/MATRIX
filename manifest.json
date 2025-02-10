@@ -50,7 +50,9 @@
     {
       "resources": [
         "warning.html",
-        "MATRIX/icons&images/warning-icon.svg"
+        "MATRIX/icons&images/warning-icon.svg",
+        "MATRIX/styles.css",
+        "MATRIX/warning.js"
       ],
       "matches": [
         "<all_urls>"

@@ -1,4 +1,14 @@
 // Function to show the warning overlay
+console.log("Checking if content script is injected!");
+console.log("🚨 Checking if this site is malicious:", window.location.hostname);
+
+if (window.location.hostname.includes("malicious-site.com")) {
+    console.log("⚠️ WARNING! Malicious site detected:", window.location.hostname);
+    showWarningOverlay();
+} else {
+    console.log("✅ This site seems safe:", window.location.hostname);
+}
+
 function showWarningOverlay() {
   // Create the iframe element
   let iframe = document.createElement("iframe");
