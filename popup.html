@@ -1,19 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Safe Browsing</title>
-  <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <div class="popup-container">
-    <h1>Safe Browsing</h1>
-    <p id="modelStatus">Loading Model...</p>
-    <div id="predictionResult" class="prediction"></div>
-    <button id="testDownloadBtn">Test Download Block</button>
-  </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Browsing</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 
-  <script src="popup.js"></script>
+    <style>
+        body {
+            font-family: 'JetBrains Mono', monospace;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+        }
+
+        .popup-container {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(94, 234, 212, 0.1);
+            box-shadow: 0 0 30px rgba(94, 234, 212, 0.05);
+        }
+
+        .cyber-button {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cyber-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        .cyber-button:hover::before {
+            left: 100%;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .status-pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-6 text-gray-200">
+    <div class="popup-container rounded-xl p-8 max-w-md w-full">
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold mb-2 bg-gradient-to-r from-teal-400 to-cyan-400 bg-clip-text text-transparent">
+                Safe Browsing
+            </h1>
+            <div class="text-sm text-gray-400">Protection Active</div>
+        </div>
+
+        <div class="space-y-6">
+            <div class="bg-gray-800/50 rounded-lg p-4">
+                <p id="modelStatus" class="text-center status-pulse">Loading Model...</p>
+            </div>
+
+            <div id="predictionResult" class="prediction bg-gray-800/50 rounded-lg p-4 text-center">
+                <!-- Prediction results will appear here -->
+            </div>
+
+            <button id="testDownloadBtn" 
+                    class="cyber-button w-full bg-teal-600/80 hover:bg-teal-700/80 
+                           transition-all duration-300 py-3 px-6 rounded-lg 
+                           font-semibold flex items-center justify-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd" />
+                </svg>
+                Test Download Block
+            </button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
 </body>
 </html>
