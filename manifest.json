@@ -2,23 +2,28 @@
   "manifest_version": 3,
   "name": "Matrix",
   "version": "1.0",
-  "description": "Detects Phishing, Malicious Websites, Malware, and Ransomware attacks.",
+  "description": "Detects phishing, malicious websites, malware, and ransomware attacks. Scans emails using the Gmail API.",
   "permissions": [
-    "tabs",
-    "activeTab",
-    "scripting",
-    "webRequest",
-    "webNavigation",
-    "downloads",
-    "storage",
-    "declarativeNetRequest",
-    "alarms",
-    "offscreen"
+    "identity", 
+    "tabs", 
+    "scripting", 
+    "webRequest", 
+    "downloads", 
+    "storage", 
+    "declarativeNetRequest", 
+    "activeTab"
   ],
   "host_permissions": [
     "https://*/*",
-    "http://*/*"
+    "http://*/*",
+    "https://www.googleapis.com/*"
   ],
+  "oauth2": {
+    "client_id": "178584536884-5tgopkmfmnpc3jc89hlq9qblp55ap3e5.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/gmail.readonly"
+    ]
+  },
   "background": {
     "service_worker": "background.js"
   },
@@ -34,7 +39,12 @@
     }
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons&images/mat-icon16.jpg",
+      "48": "icons&images/mat-icon48.jpg",
+      "128": "icons&images/mat-icon128.jpg"
+    }
   },
   "web_accessible_resources": [
     {
